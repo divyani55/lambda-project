@@ -1,17 +1,23 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: Simple Lambda deployment using CodePipeline + SAM
+version: 0.2
 
-Resources:
-  MyLambdaFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: lambda_function.lambda_handler
-      Runtime: python3.11
-      CodeUri: .
-      Timeout: 10
+phases:
+  install:
+    commands:
+      - echo "Installing SAM CLI"
+      - pip install aws-sam-cli
 
-Outputs:
-  LambdaFunctionName:
-    Description: Name of the Lambda function
-    Value: !Ref MyLambdaFunction
+  build:
+    commands:
+      - echo "Building SAM project"
+      - sam build --use-container
+
+  post_build:
+    commands:
+      - echo "Packaging SAM artifacts"
+      - sam package \
+          --s3-bucket $S3_BUCKET \
+          --output-template-file packaged.yaml
+
+artifacts:
+  files:
+    - packaged.yaml
