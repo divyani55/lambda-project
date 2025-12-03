@@ -1,17 +1,18 @@
-version: 0.2
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda CI/CD Pipeline Deployment
 
-phases:
-  install:
-    runtime-versions:
-      python: 3.11
-    commands:
-      - pip install --upgrade aws-sam-cli
-  build:
-    commands:
-      - echo "Building Lambda function"
-      - sam build
-      - echo "Zipping built Lambda package"
-      - zip -r function.zip .aws-sam/build/LambdaFunction
-artifacts:
-  files:
-    - function.zip
+Globals:
+  Function:
+    Timeout: 5
+    MemorySize: 128
+    Runtime: python3.11
+
+Resources:
+
+  PipelineLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: pipeline-lambda-cicd
+      Handler: lambda_function.lambda_handler
+      CodeUri: .
