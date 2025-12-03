@@ -16,7 +16,7 @@ phases:
   post_build:
     commands:
       - echo "Packaging Lambda"
-      - cd .aws-sam/build/MyLambdaFunction
+      - cd .aws-sam/build/PipelineLambdaFunction
       - zip -r ../../function.zip .
 
 artifacts:
