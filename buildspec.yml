@@ -7,8 +7,8 @@ phases:
   build:
     commands:
       - sam build
-      - sam package --s3-bucket lambda-artifacts-s3-test-bucket --output-template-file packaged.yaml
+      - zip -r function.zip .aws-sam/build/LambdaFunctionForPipeline  # Replace MyFunction with your Lambda logical ID
 
 artifacts:
   files:
-    - packaged.yaml
+    - function.zip
