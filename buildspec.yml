@@ -2,22 +2,17 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      python: 3.11
     commands:
-      - echo "Installing SAM CLI"
-      - pip install aws-sam-cli
+      - echo "Installing dependencies (if any)"
+      - if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; else echo "No requirements.txt found"; fi
 
   build:
     commands:
-      - echo "Building SAM project"
-      - sam build --use-container
-
-  post_build:
-    commands:
-      - echo "Packaging SAM artifacts"
-      - sam package \
-          --s3-bucket $S3_BUCKET \
-          --output-template-file packaged.yaml
+      - echo "Zipping Lambda function"
+      - zip -r function.zip *
 
 artifacts:
   files:
-    - packaged.yaml
+    - function.zip
