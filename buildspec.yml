@@ -1,24 +1,17 @@
-version: 0.2
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple Lambda deployment using CodePipeline + SAM
 
-phases:
-  install:
-    runtime-versions:
-      python: 3.11
-    commands:
-      - pip install --upgrade aws-sam-cli
-      - if [ -f requirements.txt ]; then pip install -r requirements.txt; else echo "No requirements.txt found"; fi
+Resources:
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.11
+      CodeUri: .
+      Timeout: 10
 
-  build:
-    commands:
-      - echo "Running SAM build"
-      - sam build
-
-  post_build:
-    commands:
-      - echo "Packaging Lambda"
-      - cd .aws-sam/build/PipelineLambdaFunction
-      - zip -r ../../function.zip .
-
-artifacts:
-  files:
-    - function.zip
+Outputs:
+  LambdaFunctionName:
+    Description: Name of the Lambda function
+    Value: !Ref MyLambdaFunction
