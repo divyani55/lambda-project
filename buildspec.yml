@@ -2,13 +2,22 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      python: 3.9
     commands:
-      - pip install aws-sam-cli
+      - pip install aws-sam-cli --upgrade
+      - pip install -r requirements.txt
+
   build:
     commands:
       - sam build
-      - zip -r function.zip .aws-sam/build/LambdaFunctionForPipeline  # Replace MyFunction with your Lambda logical ID
 
+  post_build:
+    commands:
+      - echo "Packaging SAM build artifacts"
+      # Copy SAM build output to root folder as function.zip
+      - cd .aws-sam/build
+      - zip -r ../../function.zip .
 artifacts:
   files:
     - function.zip
