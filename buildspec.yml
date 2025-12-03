@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - pip install aws-sam-cli
+  build:
+    commands:
+      - sam build
+      - sam package --s3-bucket lambda-artifacts --output-template-file packaged.yaml
+
+artifacts:
+  files:
+    - packaged.yaml
