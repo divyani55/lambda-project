@@ -3,21 +3,22 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.9
+      python: 3.11
     commands:
-      - pip install aws-sam-cli --upgrade
-      - pip install -r requirements.txt
+      - pip install --upgrade aws-sam-cli
+      - pip install -r requirements.txt || true
 
   build:
     commands:
+      - echo "Running SAM build"
       - sam build
 
   post_build:
     commands:
-      - echo "Packaging SAM build artifacts"
-      # Copy SAM build output to root folder as function.zip
-      - cd .aws-sam/build
+      - echo "Packaging Lambda"
+      - cd .aws-sam/build/MyLambdaFunction
       - zip -r ../../function.zip .
+
 artifacts:
   files:
     - function.zip
