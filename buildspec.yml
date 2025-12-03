@@ -5,18 +5,13 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installing dependencies if any"
-      - if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; else echo "No requirements.txt found"; fi
+      - echo "Installing dependencies..."
+      - if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; else echo "No requirements.txt"; fi
 
   build:
     commands:
       - echo "Building Lambda artifact"
-      - echo "Dependencies installed in the root folder"
-
-  post_build:
-    commands:
-      - echo "Packaging Lambda function"
-      - zip -j function.zip lambda_function.py
+      - zip -r function.zip lambda_function.py
       - if [ -f requirements.txt ]; then zip -r function.zip . -x lambda_function.py; fi
 
 artifacts:
