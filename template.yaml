@@ -1,17 +1,17 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: Dummy Lambda Project CI/CD Pipeline
+version: 0.2
 
-Resources:
-  DummyLambdaFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: dummy-lambda-cicd
-      Handler: lambda_function.lambda_handler
-      Runtime: python3.11
-      CodeUri: .
-      MemorySize: 128
-      Timeout: 5
-      AutoPublishAlias: live
-      DeploymentPreference:
-        Type: AllAtOnce
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - pip install --upgrade aws-sam-cli
+  build:
+    commands:
+      - echo "Building Lambda function"
+      - sam build
+      - echo "Zipping built Lambda package"
+      - zip -r function.zip .aws-sam/build/LambdaFunction
+artifacts:
+  files:
+    - function.zip
