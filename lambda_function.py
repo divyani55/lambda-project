@@ -1,5 +1,5 @@
 def lambda_handler(event, context):
     return {
         "statusCode": 200,
-        "body": "Hello from CI/CD Pipeline Lambda!"
+        "body": "Hello from CI/CD Pipeline Lambda Function Latest!"
     }
